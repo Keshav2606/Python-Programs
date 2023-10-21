@@ -76,13 +76,16 @@ def show_table(table):
         print(row)
 
 n1, n2 = 0, 0;
-while True:
+while n1 < 5:
     print("1. Insert Data")
     print("2. Delete Data")
     print("3. Update Data")
     print("4. Show Table")
     print("5. Exit")
     n1 = int(input("Enter your Selection: "))
+    if n1 >= 5:
+        conn.close()
+        break
 
     print("Select Table:")
     print("1. Donors")
@@ -109,7 +112,3 @@ while True:
         update_data(table)
     elif n1 == 4:
         show_table(table)
-    elif n1 == 5:
-        break
-    else:
-        Print("Wrong Selection")
