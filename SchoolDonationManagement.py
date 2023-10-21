@@ -22,6 +22,7 @@ def insert_data(table):
         Address = input("Donor Address: ")
         insert_query = f"INSERT INTO {table} (DonorId, DonorName, Email, Phone, Address) VALUES ('{id}', '{Name}', '{Email}', '{Phone}', '{Address}')"
         cursor.execute(insert_query)
+        conn.commit()
         
     elif table == 'Receivers':
         id = int(input("Receiver ID: "))
@@ -31,6 +32,7 @@ def insert_data(table):
         Address = input("Receiver Address: ")
         insert_query = f"INSERT INTO {table} (ReceiverId, ReceiverName, Email, Phone, Address) VALUES ('{id}', '{Name}', '{Email}', '{Phone}', '{Address}')"
         cursor.execute(insert_query)
+        conn.commit()
 
     elif table == 'Donated_items':
         id = int(input("Item ID: "))
@@ -40,25 +42,30 @@ def insert_data(table):
         date = input("Donation Date: ")
         insert_query = f"INSERT INTO {table} (ItemId, ItemName, ItemDescription, Quantity, DonationDate) VALUES ('{id}', '{Name}', '{description}', '{qty}', '{date}')"
         cursor.execute(insert_query)
+        conn.commit()
 
     elif table == 'Available_items':
         available_qty = int(input("Quantity Available: "))
         insert_query = f"INSERT INTO {table} (Available_qty) VALUES ('{available_qty}')"
         cursor.execute(insert_query)
+        conn.commit()
 
 def delete_data(table):
     id = int(input("ID of row want to delete: "))
     if table == 'Donors':
         delete_query = f"DELETE FROM {table} WHERE DonorID = '{id}'"
         cursor.execute(delete_query)
+        conn.commit()
 
     elif table == 'Receivers':
         delete_query = f"DELETE FROM {table} WHERE ReceiverID = '{id}'"
         cursor.execute(delete_query)
+        conn.commit()
 
     elif table == 'Donated_items':
         delete_query = f"DELETE FROM {table} WHERE ItemID = '{id}'"
         cursor.execute(delete_query)
+        conn.commit()
 
 
 
@@ -74,7 +81,7 @@ while True:
     print("2. Delete Data")
     print("3. Update Data")
     print("4. Show Table")
-    print("5. Commit Changes")
+    print("5. Exit")
     n1 = int(input("Enter your Selection: "))
 
     print("Select Table:")
@@ -103,6 +110,6 @@ while True:
     elif n1 == 4:
         show_table(table)
     elif n1 == 5:
-        conn.commit()
+        break
     else:
         Print("Wrong Selection")
