@@ -1,26 +1,5 @@
 import mysql.connector
-
-# Connecting to the MySQL database
-
-conn = mysql.connector.connect(
-    host="keshavpc",
-    user="root",
-    password="km2606@MySQL",
-    database="schooldonationmanagementdb"
-)
-
-# Creating cursor object to interact with the database
-cursor = conn.cursor()
-
-# If want to create table from here
-# cursor.execute('''
-#     CREATE TABLE IF NOT EXISTS YourTableName (
-#         ID INT AUTO_INCREMENT PRIMARY KEY,
-#         Name VARCHAR(255),
-#         PhoneNumber VARCHAR(10),
-#         Email VARCHAR(255)
-#     )
-# ''')
+from mysql.connector import errorcode
 
 def insert_data(table):
     if table == 'Donors':
@@ -43,23 +22,21 @@ def insert_data(table):
 
     elif table == 'Donated_items':
         Name = input("Item Name: ")
-        description = input("Item Description: ")
         donorId = int(input("Donor Id: "))
         receiverId = int(input("Receiver Id: "))
         qty = int(input("Item Quantity: "))
         date = input("Donation Date: ")
-        insert_query = f"INSERT INTO {table} (ItemName, ItemDescription, DonorID, ReceiverID, Quantity, DonationDate) VALUES ('{Name}', '{description}','{donorId}', '{receiverId}', '{qty}', '{date}')"
+        insert_query = f"INSERT INTO {table} (ItemName, Donated_qty, DonorID, ReceiverID, DonationDate) VALUES ('{Name}', '{qty}', '{donorId}', '{receiverId}', '{date}')"
         cursor.execute(insert_query)
         conn.commit()
 
     elif table == 'Available_items':
-        cursor.execute("SELECT ItemID FROM Donated_items")
-        rows = cursor.fetchall()
-        for _id in rows:
-            available_qty = int(input(f"Quantity Available for {_id}: "))
-        insert_query = f"INSERT INTO {table} (Available_qty) VALUES ('{available_qty}') WHERE ItemID = '{_id}'"
+        id = int(input("Item Id: "))
+        available_qty = int(input(f"Quantity Available: "))
+        insert_query = f"INSERT INTO {table} (ItemID, Available_qty) VALUES ('{id}','{available_qty}')"
         cursor.execute(insert_query)
         conn.commit()
+
 
 def delete_data(table):
     id = int(input("ID of row want to delete: "))
@@ -78,14 +55,6 @@ def delete_data(table):
         cursor.execute(delete_query)
         conn.commit()
 
-def update_data(table):
-    if table == 'Donors':
-        while True:
-            print("1. ID")
-            print("2. Donor Name")
-            print("3. ")
-            attr = input("Attributes to Update: ")
-    update_query = f"UPDATE {table} "
 
 def show_table(table):
     cursor.execute(f"SELECT * FROM {table}")
@@ -93,15 +62,45 @@ def show_table(table):
     for row in rows:
         print(row)
 
-n1, n2 = 0, 0;
-while n1 < 5:
+
+
+# Connecting to the MySQL database
+try:
+    conn = mysql.connector.connect(
+        host="keshavpc",
+        user="root",
+        password="km2606@MySQL",
+        database="schooldonationmanagementdb"
+    )
+except mysql.connector.Error as err:
+    if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
+        print("Error: Invalid username or password")
+    elif err.errno == errorcode.ER_BAD_DB_ERROR:
+        print("Error: Database does not exist")
+    else:
+        print(f"Error: {err}")
+
+# Creating cursor object to interact with the database
+cursor = conn.cursor()
+
+# If want to create table from here(Python Code)
+# cursor.execute('''
+#     CREATE TABLE IF NOT EXISTS YourTableName (
+#         ID INT AUTO_INCREMENT PRIMARY KEY,
+#         Name VARCHAR(255),
+#         PhoneNumber VARCHAR(10),
+#         Email VARCHAR(255)
+#     )
+# ''')
+
+n1, n2 = 0, 0
+while n1 < 4:
     print("1. Insert Data")
     print("2. Delete Data")
-    print("3. Update Data")
-    print("4. Show Table")
-    print("5. Exit")
+    print("3. Show Table")
+    print("4. Exit")
     n1 = int(input("Enter your Selection: "))
-    if n1 >= 5:
+    if n1 >= 4:
         conn.close()
         break
 
@@ -127,6 +126,4 @@ while n1 < 5:
     elif n1 == 2:
         delete_data(table)
     elif n1 == 3:
-        update_data(table)
-    elif n1 == 4:
         show_table(table)
