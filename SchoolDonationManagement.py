@@ -10,43 +10,54 @@ conn = mysql.connector.connect(
 )
 
 # Creating cursor object to interact with the database
-
 cursor = conn.cursor()
+
+# If want to create table from here
+# cursor.execute('''
+#     CREATE TABLE IF NOT EXISTS YourTableName (
+#         ID INT AUTO_INCREMENT PRIMARY KEY,
+#         Name VARCHAR(255),
+#         PhoneNumber VARCHAR(10),
+#         Email VARCHAR(255)
+#     )
+# ''')
 
 def insert_data(table):
     if table == 'Donors':
-        id = int(input("Donor ID: "))
         Name = input("Donor Name: ")
         Email = input("Donor Email: ")
         Phone = input("Donor Contact No. : ")
         Address = input("Donor Address: ")
-        insert_query = f"INSERT INTO {table} (DonorId, DonorName, Email, Phone, Address) VALUES ('{id}', '{Name}', '{Email}', '{Phone}', '{Address}')"
+        insert_query = f"INSERT INTO {table} (DonorName, Email, Phone, Address) VALUES ('{Name}', '{Email}', '{Phone}', '{Address}')"
         cursor.execute(insert_query)
         conn.commit()
         
     elif table == 'Receivers':
-        id = int(input("Receiver ID: "))
         Name = input("Receiver Name: ")
         Email = input("Receiver Email: ")
         Phone = input("Receiver Contact No. : ")
         Address = input("Receiver Address: ")
-        insert_query = f"INSERT INTO {table} (ReceiverId, ReceiverName, Email, Phone, Address) VALUES ('{id}', '{Name}', '{Email}', '{Phone}', '{Address}')"
+        insert_query = f"INSERT INTO {table} (ReceiverName, Email, Phone, Address) VALUES ('{Name}', '{Email}', '{Phone}', '{Address}')"
         cursor.execute(insert_query)
         conn.commit()
 
     elif table == 'Donated_items':
-        id = int(input("Item ID: "))
         Name = input("Item Name: ")
         description = input("Item Description: ")
+        donorId = int(input("Donor Id: "))
+        receiverId = int(input("Receiver Id: "))
         qty = int(input("Item Quantity: "))
         date = input("Donation Date: ")
-        insert_query = f"INSERT INTO {table} (ItemId, ItemName, ItemDescription, Quantity, DonationDate) VALUES ('{id}', '{Name}', '{description}', '{qty}', '{date}')"
+        insert_query = f"INSERT INTO {table} (ItemName, ItemDescription, DonorID, ReceiverID, Quantity, DonationDate) VALUES ('{Name}', '{description}','{donorId}', '{receiverId}', '{qty}', '{date}')"
         cursor.execute(insert_query)
         conn.commit()
 
     elif table == 'Available_items':
-        available_qty = int(input("Quantity Available: "))
-        insert_query = f"INSERT INTO {table} (Available_qty) VALUES ('{available_qty}')"
+        cursor.execute("SELECT ItemID FROM Donated_items")
+        rows = cursor.fetchall()
+        for _id in rows:
+            available_qty = int(input(f"Quantity Available for {_id}: "))
+        insert_query = f"INSERT INTO {table} (Available_qty) VALUES ('{available_qty}') WHERE ItemID = '{_id}'"
         cursor.execute(insert_query)
         conn.commit()
 
@@ -67,7 +78,14 @@ def delete_data(table):
         cursor.execute(delete_query)
         conn.commit()
 
-
+def update_data(table):
+    if table == 'Donors':
+        while True:
+            print("1. ID")
+            print("2. Donor Name")
+            print("3. ")
+            attr = input("Attributes to Update: ")
+    update_query = f"UPDATE {table} "
 
 def show_table(table):
     cursor.execute(f"SELECT * FROM {table}")
