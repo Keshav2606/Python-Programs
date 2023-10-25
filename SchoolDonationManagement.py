@@ -70,50 +70,37 @@ def show_table(table):
 
 n = 0
 email = None; pwd = None
-email_chk = None; pwd_chk = None
-print("1. Sign Up")
-print("2. Sign In")
-n = int(input("Enter your Selection: "))
-if n == 1:
-    print("Create a new user Account")
-    email = input("Enter your Email Address: ")
-    pwd = input("Create a new Password: ")
-    print("New user created Successfully...")
-    print("\n")
-    print("Enter your Login credentials")
-    email_chk = input("Enter your Email Address: ")
-    pwd_chk = input("Enter your Password: ")
-    print("Login Successfull...")
-    print("\n")
-if n == 2:
-    print("Enter your Login credentials")
-    email_chk = input("Enter your Email Address: ")
-    pwd_chk = input("Enter your Password: ")
-    print("Login Successfull...")
-    print("\n")
+email_chk = 0; pwd_chk = 0
+while email != email_chk or pwd != pwd_chk:
+    print("1. Sign Up")
+    print("2. Sign In")
+    n = int(input("Enter your Selection: "))
+    if n == 1:
+        print("Create a new user Account")
+        email = input("Enter your Email Address: ")
+        pwd = input("Create a new Password: ")
+        print("New user created Successfully...")
+        print("\n")
+        n = 2
+    if n == 2:
+        print("Enter your Login credentials")
+        email_chk = input("Enter your Email Address: ")
+        pwd_chk = input("Enter your Password: ")
+        if email == email_chk and pwd == pwd_chk:
+            print("Login Successfull...")
+            print("\n")
+        else:
+            print("Invalid Username or Password")
+            print("\n")
 
-if email != email_chk or pwd != pwd_chk:
-    print("Invalid Username or Password")
-    print("\n")
-    print("Create a new user Account")
-    email = input("Enter your Email Address: ")
-    pwd = input("Create a new Password: ")
-    print("New user created Successfully...")
-    print("\n")
-    print("Enter your Login credentials")
-    email_chk = input("Enter your Email Address: ")
-    pwd_chk = input("Enter your Password: ")
-    print("Login Successfull...")
-    print("\n")
-
-
+  
 if email == email_chk and pwd == pwd_chk:
     # Connecting to the MySQL database
     try:
         conn = mysql.connector.connect(
-        host="keshavpc",
-        user= "root",
-        password= "km2606@MySQL",
+        host="",
+        user= "",
+        password= "",
         database="schooldonationmanagementdb"
         )
     except mysql.connector.Error as err:
